@@ -5,7 +5,7 @@ import useCounter from 'react-use/lib/useCounter'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import useWideMode from "../../hooks/useWideMode"
-import useKeyboardSize from "../../hooks/useKeyboardSize"
+// import useKeyboardSize from "../../hooks/useKeyboardSize"
 import { getStatusBarCurrentHeight } from "../../utils/toolbox"
 
 const styles = StyleSheet.create({
@@ -24,7 +24,7 @@ const KeyboardAvoidingView = ({
   const [ yOffset, setYOffset ] = useState(0)
   const [ orientationChangeIdx, { inc: incrementOrientationChangeIdx } ] = useCounter(0)
   const wideModeWithEitherOrientation = useWideMode(true)
-  const { keyboardOpen } = useKeyboardSize()
+  // const { keyboardOpen } = useKeyboardSize()
 
   const safeAreaInsets = useSafeAreaInsets()
 
@@ -75,8 +75,13 @@ const KeyboardAvoidingView = ({
       ]}
       behavior={Platform.select({ android: 'height', ios: 'padding' })}
       keyboardVerticalOffset={
-        (Platform.OS === 'android' && keyboardOpen)
-          ? 0  // this is an android hack due to a buck in KeyboardAvoidingView (https://stackoverflow.com/questions/41616457/keyboardavoidingview-reset-height-when-keyboard-is-hidden)
+        // (Platform.OS === 'android' && keyboardOpen)
+        //   ? 0  // this is an android hack due to a buck in KeyboardAvoidingView (https://stackoverflow.com/questions/41616457/keyboardavoidingview-reset-height-when-keyboard-is-hidden)
+        //   : yOffset
+
+        // After updating to Expo 50, a space was being created at the bottom of some Android devices after the keyboard was shown. The change below (as compared to above) fixes that.
+        Platform.OS === 'android'
+          ? 0
           : yOffset
       }
       {...otherProps}
